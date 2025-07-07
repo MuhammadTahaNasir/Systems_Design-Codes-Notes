@@ -93,16 +93,14 @@ public:
     }
 };
 
-// Main app class
-class RideSharingApp
+
+class RideManager
 {
 private:
     vector<Ride *> rides;
     vector<Vehicle *> vehicles;
-    Persistence *storage;
 
 public:
-    RideSharingApp(Persistence *store) : storage(store) {}
     void addVehicle(Vehicle *vehicle)
     {
         vehicles.push_back(vehicle);
@@ -119,7 +117,7 @@ public:
         }
         cout << "Vehicle not found!" << endl;
     }
-    string trackRideStatus(int index)
+    string getRideStatus(int index)
     {
         if (index < rides.size())
         {
@@ -127,29 +125,48 @@ public:
         }
         return "Invalid ride index";
     }
-    void saveRideDetails()
+    string getRideDetails()
     {
         string content = "";
         for (auto ride : rides)
         {
             content += ride->getDetails() + "\n";
         }
-        storage->save(content);
+        return content;
     }
-    ~RideSharingApp()
+    ~RideManager()
     {
         for (auto ride : rides)
             delete ride;
         for (auto vehicle : vehicles)
             delete vehicle;
+    }
+};
+
+class RideSharingApp
+{
+private:
+    RideManager *rideManager;
+    Persistence *storage;
+
+public:
+    RideSharingApp(RideManager *rm, Persistence *store) : rideManager(rm), storage(store) {}
+    void addVehicle(Vehicle *vehicle) { rideManager->addVehicle(vehicle); }
+    void bookRide(string vehicleType, string destination) { rideManager->bookRide(vehicleType, destination); }
+    string trackRideStatus(int index) { return rideManager->getRideStatus(index); }
+    void saveRideDetails() { storage->save(rideManager->getRideDetails()); }
+    ~RideSharingApp()
+    {
+        delete rideManager;
         delete storage;
     }
 };
 
 int main()
 {
+    RideManager *rm = new RideManager();
     Persistence *storage = new FileStorage();
-    RideSharingApp app(storage);
+    RideSharingApp app(rm, storage);
 
     app.addVehicle(new BikeVehicle("Honda Bike"));
     app.addVehicle(new CarVehicle("Suzuki Mehran"));
