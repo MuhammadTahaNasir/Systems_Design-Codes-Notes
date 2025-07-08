@@ -1,0 +1,60 @@
+@startuml
+' Main system entry
+class Bazaar
+
+' Services
+class NotificationService
+class SellerManager
+class OrderManager
+class OrderFactory
+
+' Core classes
+class User
+class Cart
+class Seller
+class Product
+class Order
+class DeliveryOrder
+class PickupOrder
+class PaymentStrategy
+class JazzCashPayment
+class CreditCardPayment
+class NowOrderFactory
+class ScheduledOrderFactory
+
+' -------------------------
+' Inheritance
+Order <|-- DeliveryOrder
+Order <|-- PickupOrder
+
+PaymentStrategy <|-- JazzCashPayment
+PaymentStrategy <|-- CreditCardPayment
+
+OrderFactory <|-- NowOrderFactory
+OrderFactory <|-- ScheduledOrderFactory
+
+' -------------------------
+' Associations
+Bazaar --> NotificationService
+NotificationService --> Order
+
+Bazaar --> SellerManager
+SellerManager o-- Seller
+Seller --> Product : composed
+
+Bazaar --> User
+User *-- Cart : owns
+Cart o-- Product
+Cart --> Seller : associated
+
+Bazaar --> OrderManager
+OrderManager o-- Order
+
+Order --> User : uses
+Order --> Seller : uses
+Order --> Product : uses
+Order --> PaymentStrategy : uses
+
+Bazaar --> OrderFactory
+OrderFactory --> Order
+@enduml
