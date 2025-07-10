@@ -6,7 +6,7 @@
 #include "User.hpp"
 #include "Seller.hpp"
 #include "Product.hpp"
-#include "PaymentStrategy.hpp"
+#include "strategies/PaymentStrategy.hpp"
 
 class Order {
 private:
