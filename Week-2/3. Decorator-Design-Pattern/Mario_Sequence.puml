@@ -1,0 +1,31 @@
+@startuml
+actor Player
+participant "Mario:ICharacter" as Mario
+participant "Height:ICharacter" as Height
+participant "Gun:ICharacter" as Gun
+participant "Star:ICharacter" as Star
+
+Player -> Mario: getAbilities()
+Mario --> Player: "Mario Character"
+Player -> Height: new HeightDecorator(Mario)
+Player -> Height: getAbilities()
+Height -> Mario: getAbilities()
+Mario --> Height: "Mario Character"
+Height --> Player: "Mario Character with Height"
+Player -> Gun: new GunDecorator(Height)
+Player -> Gun: getAbilities()
+Gun -> Height: getAbilities()
+Height -> Mario: getAbilities()
+Mario --> Height: "Mario Character"
+Height --> Gun: "Mario Character with Height"
+Gun --> Player: "Mario Character with Height with Gun"
+Player -> Star: new StarDecorator(Gun)
+Player -> Star: getAbilities()
+Star -> Gun: getAbilities()
+Gun -> Height: getAbilities()
+Height -> Mario: getAbilities()
+Mario --> Height: "Mario Character"
+Height --> Gun: "Mario Character with Height"
+Gun --> Star: "Mario Character with Height with Gun"
+Star --> Player: "Mario Character with Height with Gun with Star"
+@enduml

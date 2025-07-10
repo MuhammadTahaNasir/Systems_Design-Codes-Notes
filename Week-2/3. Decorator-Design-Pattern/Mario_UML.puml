@@ -1,0 +1,33 @@
+@startuml
+interface ICharacter {
+  +getAbilities(): String
+}
+
+class MarioCharacter {
+  +getAbilities(): String
+}
+
+abstract class CharacterDecorator {
+  -character: ICharacter
+  +getAbilities(): String
+}
+
+class HeightDecorator {
+  +getAbilities(): String
+}
+
+class GunDecorator {
+  +getAbilities(): String
+}
+
+class StarDecorator {
+  +getAbilities(): String
+}
+
+ICharacter <|.. MarioCharacter
+ICharacter <|.. CharacterDecorator
+CharacterDecorator <|.. HeightDecorator
+CharacterDecorator <|.. GunDecorator
+CharacterDecorator <|.. StarDecorator
+CharacterDecorator o--> ICharacter : character
+@enduml
